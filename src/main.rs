@@ -1,5 +1,6 @@
 mod chip8;
 mod memory;
+mod cpu;
 use chip8::Chip8;
 
 fn main() -> Result<(), Box<dyn std::error::Error>> {
