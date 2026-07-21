@@ -31,8 +31,6 @@ impl Cpu {
     pub fn decode_and_execute(&mut self, opcode: u16, memory: &mut Memory) {
         let nibble1 = (opcode & 0xF000) >> 12;
 
-        println!("{:#06x}", opcode);
-
         match nibble1 {
             0x0 => {
                 // 00E0 = clear screen, 00EE = return — check the last byte to tell them apart
@@ -44,7 +42,8 @@ impl Cpu {
             }
             0x1 => {
                 // 1NNN = jump
-                // println!("jump")
+                let nnn = opcode & 0x0FFF;
+                self.pc = nnn;
             }
             0x6 => {
                 // 6XNN = set Vx
@@ -56,7 +55,7 @@ impl Cpu {
                 // 7XNN = add Vx
                 let x = ((opcode & 0x0F00) >> 8) as usize;
                 let nn = (opcode & 0x00FF) as u8;
-                self.registers[x] += nn
+                self.registers[x] = self.registers[x].wrapping_add(nn);
             }
             0xA => {
                 // ANNN = set I
@@ -65,7 +64,7 @@ impl Cpu {
             }
             0xD => {
                 // DXYN = draw — stub as a print for now, no Display yet
-                // println!("Draw")
+                println!("Draw")
             }
             _ => println!("unhandled opcode: {:#06x}", opcode),
         }
