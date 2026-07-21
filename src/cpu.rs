@@ -1,5 +1,5 @@
-use crate::memory::Memory;
 use crate::display::Display;
+use crate::memory::Memory;
 pub struct Cpu {
     pub registers: [u8; 16],
     pub i: u16,
@@ -65,7 +65,12 @@ impl Cpu {
             }
             0xD => {
                 // DXYN = draw — stub as a print for now, no Display yet
-                println!("Draw")
+                let x = ((opcode & 0x0F00) >> 8) as u8;
+                let y = ((opcode & 0x00F0) >> 4) as u8;
+                let n = (opcode & 0x000F) as u8;
+                let sprite = &memory.ram[self.i as usize..(self.i as usize + n as usize)];
+                let collision = display.draw(x, y, sprite);
+                self.registers[0xF] = if collision { 1 } else { 0 };
             }
             _ => println!("unhandled opcode: {:#06x}", opcode),
         }
