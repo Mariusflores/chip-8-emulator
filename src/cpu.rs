@@ -1,4 +1,5 @@
 use crate::memory::Memory;
+use crate::display::Display;
 pub struct Cpu {
     pub registers: [u8; 16],
     pub i: u16,
@@ -28,14 +29,14 @@ impl Cpu {
         (high << 8) | low
     }
 
-    pub fn decode_and_execute(&mut self, opcode: u16, memory: &mut Memory) {
+    pub fn decode_and_execute(&mut self, opcode: u16, memory: &mut Memory, display: &mut Display) {
         let nibble1 = (opcode & 0xF000) >> 12;
 
         match nibble1 {
             0x0 => {
                 // 00E0 = clear screen, 00EE = return — check the last byte to tell them apart
                 match opcode & 0x00FF {
-                    0xE0 => println!("Clear Display"),
+                    0xE0 => display.clear(),
                     0xEE => println!("return"),
                     _ => println!("unhandled 0x0 opcode: {:#06x}", opcode),
                 }

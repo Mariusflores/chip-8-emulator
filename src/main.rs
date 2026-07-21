@@ -1,5 +1,6 @@
 mod chip8;
 mod cpu;
+mod display;
 mod memory;
 use chip8::Chip8;
 

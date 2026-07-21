@@ -1,9 +1,12 @@
+
 use crate::cpu::Cpu;
 use crate::memory::Memory;
+use crate::display::Display;
 
 pub struct Chip8 {
     pub memory: Memory,
     pub cpu: Cpu,
+    pub display: Display,
 }
 
 impl Chip8 {
@@ -11,6 +14,7 @@ impl Chip8 {
         Chip8 {
             memory: Memory::new(),
             cpu: Cpu::new(),
+            display: Display::new(),
         }
     }
 
@@ -23,6 +27,6 @@ impl Chip8 {
     }
 
     pub fn decode_and_execute(&mut self, opcode: u16) {
-        self.cpu.decode_and_execute(opcode, &mut self.memory);
+        self.cpu.decode_and_execute(opcode, &mut self.memory, &mut self.display);
     }
 }
