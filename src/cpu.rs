@@ -64,11 +64,13 @@ impl Cpu {
                 self.i = nnn;
             }
             0xD => {
-                // DXYN = draw — stub as a print for now, no Display yet
-                let x = ((opcode & 0x0F00) >> 8) as u8;
-                let y = ((opcode & 0x00F0) >> 4) as u8;
+                let vx = ((opcode & 0x0F00) >> 8) as usize;
+                let vy = ((opcode & 0x00F0) >> 4) as usize;
                 let n = (opcode & 0x000F) as u8;
+                let x = self.registers[vx];
+                let y = self.registers[vy];
                 let sprite = &memory.ram[self.i as usize..(self.i as usize + n as usize)];
+
                 let collision = display.draw(x, y, sprite);
                 self.registers[0xF] = if collision { 1 } else { 0 };
             }

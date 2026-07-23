@@ -29,4 +29,8 @@ impl Chip8 {
         self.cpu
             .decode_and_execute(opcode, &mut self.memory, &mut self.display);
     }
+
+    pub fn to_buffer(&mut self, scale: usize, width: usize, height: usize) -> Vec<u32>{
+        return self.display.to_buffer(scale, width, height);
+    }
 }
